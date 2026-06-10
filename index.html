@@ -1,4 +1,4 @@
-<html lang="th"><head>
+﻿<html lang="th"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>เทลรันนิ่ง วิ่งทะลุจอ — ลงทะเบียน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -144,7 +144,7 @@ input:focus,select:focus{outline:none;border-color:var(--g);box-shadow:0 0 0 3px
 <div class="toast" id="toast"></div>
 
 <script>
-const URL_GAS = 'https://script.google.com/macros/s/AKfycbxGoznZeAE7bzb0t9Pqm8rQ0ao75SdRLUIjdqbriTzvKmxWO9XHQSIaeZv_X70qU3ma/exec';
+const URL_GAS = 'https://script.google.com/macros/s/AKfycbx3thT2mnoj9Hig9pcvZJayQ71fIl7pY022vRDLoUrYA7Zd2FB4dZfaTRBudxvQvatq/exec';
 
 // ===== TIME PICKER (24h) =====
 (function(){
@@ -257,10 +257,8 @@ async function send(){
       imgLucky:h4,imgLuckyName:document.getElementById('iLk').files[0]?.name||'',
       imgPayment:h5,imgPaymentName:document.getElementById('iPay').files[0]?.name||''
     };
-    const res=await fetch(URL_GAS,{method:'POST',body:JSON.stringify(pl),headers:{'Content-Type':'application/json'}});
-    const j=await res.json();
-    if(j.status==='ok'){toast('บันทึกข้อมูลเรียบร้อย! 🎉','ok');b.textContent='🎉 ส่งข้อมูลสำเร็จ!';b.style.background='linear-gradient(135deg,#43a047,#2e7d32)';}
-    else throw new Error(j.message||'Unknown error');
+    await fetch(URL_GAS,{method:'POST',body:JSON.stringify(pl),headers:{'Content-Type':'text/plain'},mode:'no-cors'});
+    toast('บันทึกข้อมูลเรียบร้อย! 🎉','ok');b.textContent='🎉 ส่งข้อมูลสำเร็จ!';b.style.background='linear-gradient(135deg,#43a047,#2e7d32)';
   }catch(err){toast('เกิดข้อผิดพลาด: '+err.message,'er');b.disabled=false;b.textContent='✅ ยืนยันสิทธิ์รับรางวัล';updSub();}
 }
 </script></body></html>
