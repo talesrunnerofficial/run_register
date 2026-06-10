@@ -216,7 +216,32 @@ function prev(inp,aId,pvId,fnId){
 function toast(msg,type='ok'){const t=document.getElementById('toast');t.textContent=(type==='ok'?'✅ ':'❌ ')+msg;t.className='toast '+type+' sh';setTimeout(()=>t.classList.remove('sh'),3500);}
 
 // ===== TO BASE64 =====
-function toB64(f){return new Promise((res,rej)=>{if(!f){res('');return;}const r=new FileReader();r.onload=e=>res(e.target.result);r.onerror=rej;r.readAsDataURL(f);});}
+// บีบอัดรูปก่อนส่ง (ลดขนาดลง ~90%)
+function toB64(f){
+  return new Promise((res,rej)=>{
+    if(!f){res('');return;}
+    const maxW=1280,maxH=1280,quality=0.7;
+    const reader=new FileReader();
+    reader.onerror=rej;
+    reader.onload=ev=>{
+      const img=new Image();
+      img.onerror=rej;
+      img.onload=()=>{
+        let w=img.width,h=img.height;
+        if(w>maxW||h>maxH){
+          if(w/h>maxW/maxH){h=Math.round(h*maxW/w);w=maxW;}
+          else{w=Math.round(w*maxH/h);h=maxH;}
+        }
+        const canvas=document.createElement('canvas');
+        canvas.width=w;canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        res(canvas.toDataURL('image/jpeg',quality));
+      };
+      img.src=ev.target.result;
+    };
+    reader.readAsDataURL(f);
+  });
+}
 
 // ===== SUBMIT =====
 async function send(){
